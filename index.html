@@ -4,191 +4,258 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AEM Exam Prep Platform</title>
-<style>
+
+</head><style>
+/* ── RESET ── */
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;background:#f0f2f5;color:#1a202c;min-height:100vh;font-size:15px}
-header{background:#0f2d4a;color:#fff;padding:0}
-.hdr-inner{max-width:1100px;margin:0 auto;padding:18px 24px 0}
-.hdr-brand{display:flex;align-items:center;gap:14px;margin-bottom:16px}
-.shield{width:42px;height:42px;background:#d4570a;border-radius:50% 50% 40% 40%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.brand-text h1{font-size:19px;font-weight:700}
-.brand-text p{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.05em;text-transform:uppercase}
-nav{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.1);overflow-x:auto}
-.nb{background:none;border:none;color:rgba(255,255,255,.6);padding:11px 16px;cursor:pointer;font-size:13px;border-bottom:3px solid transparent;white-space:nowrap;transition:.15s}
-.nb:hover{color:#fff;background:rgba(255,255,255,.06)}
-.nb.active{color:#fff;border-bottom-color:#d4570a}
-.ctry-bar{background:#1a4570;border-bottom:1px solid rgba(255,255,255,.1)}
-.ctry-inner{max-width:1100px;margin:0 auto;padding:9px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.ctry-label{font-size:12px;color:rgba(255,255,255,.6)}
-.ctry-sel{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 10px;border-radius:7px;font-size:13px;cursor:pointer}
-.ctry-sel option{background:#1a4570}
-.rcount{font-size:12px;color:rgba(255,255,255,.45)}
-main{max-width:1100px;margin:0 auto;padding:24px}
+:root{
+  --navy:#0f2d4a;--navy-mid:#1a4570;--navy-light:#e8f0f8;
+  --orange:#d4570a;--orange-light:#fdf0e8;
+  --slate:#4a5568;--slate-light:#f7f8fa;
+  --green:#1a6b3c;--green-light:#e8f5ed;
+  --red:#b91c1c;--red-light:#fef2f2;
+  --amber:#92400e;--amber-light:#fffbeb;
+  --border:#e2e8f0;--text:#1a202c;--text-muted:#718096;
+  --radius:8px;--radius-lg:12px
+}
+body{font-family:system-ui,sans-serif;background:#f0f2f5;color:var(--text);font-size:15px;line-height:1.6}
+
+/* ── TOP BAR ── */
+.topbar{position:sticky;top:0;z-index:150;background:var(--navy);height:50px;display:flex;align-items:center;gap:12px;padding:0 16px}
+.hamburger{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hamburger:hover{background:rgba(255,255,255,.12)}
+.topbar-title{color:#fff;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ── LAYOUT ── */
+/* Topbar is fixed at top. Sidebar is fixed below topbar on left.
+   Main content has left margin = sidebar width on desktop. */
+
+.layout{display:block;min-height:calc(100vh - 50px)}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  position:fixed;
+  top:50px;
+  left:0;
+  width:220px;
+  height:calc(100vh - 50px);
+  background:var(--navy);
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+  z-index:200;
+  transform:translateX(-220px);
+  transition:transform .22s ease;
+}
+#sidebar.sb-open{transform:translateX(0)}
+.sb-top{display:flex;align-items:center;gap:9px;padding:14px 12px 10px;border-bottom:1px solid rgba(255,255,255,.1);flex-shrink:0}
+.shield{width:32px;height:32px;background:var(--orange);border-radius:50% 50% 40% 40%;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;flex-shrink:0}
+.sb-brand-text{flex:1;min-width:0}
+.sb-title{font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.sb-sub{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.05em}
+.sb-close{background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:16px;padding:4px;border-radius:4px;flex-shrink:0;line-height:1}
+.sb-close:hover{color:#fff;background:rgba(255,255,255,.1)}
+.sb-ctry{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.sb-ctry-label{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:5px}
+.sb-sel{width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding:6px 8px;border-radius:6px;font-size:12px;cursor:pointer}
+.sb-sel option{background:var(--navy);color:#fff}
+.sb-nav{display:flex;flex-direction:column;gap:2px;padding:8px;flex:1}
+.nb{background:none;border:none;color:rgba(255,255,255,.65);padding:9px 12px;cursor:pointer;font-size:13px;border-radius:7px;text-align:left;width:100%;transition:.12s;border-left:3px solid transparent;display:block}
+.nb:hover{color:#fff;background:rgba(255,255,255,.09)}
+.nb.active{color:#fff;background:rgba(255,255,255,.13);border-left-color:var(--orange)}
+.sb-rcount{font-size:10px;color:rgba(255,255,255,.3);padding:8px 14px 14px;line-height:1.5;flex-shrink:0}
+#sideOverlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:199;display:none}
+
+/* ── MAIN ── */
+main{
+  margin-left:0;
+  padding:24px;
+  min-height:calc(100vh - 50px);
+  transition:margin-left .22s ease;
+}
 .panel{display:none}.panel.active{display:block}
-.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#d4570a;margin-bottom:5px}
-.ptitle{font-size:22px;font-weight:700;color:#0f2d4a;margin-bottom:3px}
-.psub{font-size:14px;color:#718096;margin-bottom:22px}
-/* Cards */
-.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px}
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:15px;position:relative;overflow:hidden;cursor:pointer;transition:.15s}
-.card:hover{border-color:#0f2d4a;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
-.card .wbar{position:absolute;top:0;left:0;height:3px;background:#d4570a}
-.card .wt{font-size:11px;color:#d4570a;font-weight:700;margin-bottom:3px}
-.card h3{font-size:14px;font-weight:700;color:#0f2d4a;margin-bottom:5px}
-.card .sc{font-size:12px;color:#718096}
-.card .cbtn{margin-top:10px;font-size:12px;color:#0f2d4a;background:#e8f0f8;border:none;border-radius:6px;padding:5px 10px;cursor:pointer}
+
+/* Desktop: main shifts right when sidebar open */
+@media(min-width:769px){
+  main.sb-pushed{margin-left:220px}
+}
+/* Mobile: main never shifts, sidebar overlays */
+@media(max-width:768px){
+  main{padding:14px}
+}
+
+/* ── COMPONENTS ── */
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:5px}
+.ptitle{font-size:22px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.psub{font-size:14px;color:var(--text-muted);margin-bottom:22px}
+
 /* Hero */
-.hero{background:#0f2d4a;color:#fff;border-radius:12px;padding:28px;margin-bottom:24px;display:flex;gap:28px;flex-wrap:wrap}
+.hero{background:var(--navy);color:#fff;border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
 .hero-t{flex:1;min-width:220px}
-.hero-t h2{font-size:24px;margin-bottom:8px}
+.hero-t h2{font-size:22px;margin-bottom:8px}
 .hero-t p{font-size:14px;color:rgba(255,255,255,.7);line-height:1.7}
-.hero-stats{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
-.hstat .n{font-size:28px;font-weight:700}
-.hstat .l{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.5)}
-/* QS cards */
-.qs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:26px}
-.qsc{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;cursor:pointer;transition:.15s}
-.qsc:hover{border-color:#0f2d4a;box-shadow:0 2px 8px rgba(0,0,0,.07)}
-.qsc .qi{width:34px;height:34px;border-radius:8px;background:#e8f0f8;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:9px}
-.qsc h3{font-size:14px;font-weight:700;color:#0f2d4a;margin-bottom:3px}
-.qsc p{font-size:12px;color:#718096}
+.hero-stats{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.hstat .n{font-size:26px;font-weight:700}
+.hstat .l{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.5)}
+
+/* QS grid */
+.qs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:11px;margin-bottom:24px}
+.qsc{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:15px;cursor:pointer;transition:.15s}
+.qsc:hover{border-color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.qsc .qi{width:32px;height:32px;border-radius:8px;background:var(--navy-light);display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:8px}
+.qsc h3{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.qsc p{font-size:11px;color:var(--text-muted)}
+
+/* Domain cards */
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:15px;position:relative;overflow:hidden;cursor:pointer;transition:.15s}
+.card:hover{border-color:var(--navy);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.card .wbar{position:absolute;top:0;left:0;height:3px;background:var(--orange)}
+.card .wt{font-size:11px;color:var(--orange);font-weight:700;margin-bottom:3px}
+.card h3{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.card .sc{font-size:12px;color:var(--text-muted)}
+.card .cbtn{margin-top:10px;font-size:12px;color:var(--navy);background:var(--navy-light);border:none;border-radius:6px;padding:5px 10px;cursor:pointer}
+
 /* Resources */
 .rcat{margin-bottom:26px}
-.rcat-title{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#4a5568;border-bottom:1px solid #e2e8f0;padding-bottom:7px;margin-bottom:11px}
-.ritem{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:11px 14px;display:flex;align-items:flex-start;gap:11px;margin-bottom:7px}
-.orgtag{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:#e8f0f8;color:#0f2d4a;padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:2px}
-.rname{font-size:14px;font-weight:600;color:#0f2d4a;margin-bottom:2px}
-.rlink{font-size:12px;color:#d4570a;text-decoration:none}
+.rcat-title{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--slate);border-bottom:1px solid var(--border);padding-bottom:7px;margin-bottom:11px}
+.ritem{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;display:flex;align-items:flex-start;gap:11px;margin-bottom:7px}
+.orgtag{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--navy-light);color:var(--navy);padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.rname{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.rlink{font-size:12px;color:var(--orange);text-decoration:none}
 .rlink:hover{text-decoration:underline}
-.rnote{font-size:11px;color:#718096;margin-top:2px}
+.rnote{font-size:11px;color:var(--text-muted);margin-top:2px}
+
 /* Learn */
-.dom-hdr{background:#0f2d4a;color:#fff;padding:18px 22px;border-radius:12px;margin-bottom:16px}
+.dom-hdr{background:var(--navy);color:#fff;padding:18px 22px;border-radius:var(--radius-lg);margin-bottom:16px}
 .dom-hdr h2{font-size:19px;margin-bottom:4px}
 .dom-hdr p{font-size:13px;color:rgba(255,255,255,.65)}
-.sub-item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:13px 16px;cursor:pointer;margin-bottom:9px;transition:.15s}
-.sub-item:hover{border-color:#0f2d4a}
-.sub-code{font-size:11px;font-weight:700;color:#d4570a;font-family:monospace;margin-bottom:3px}
-.sub-text{font-size:14px;color:#0f2d4a}
-.learn-body{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin-top:10px;display:none}
+.sub-item{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:13px 16px;cursor:pointer;margin-bottom:9px;transition:.15s}
+.sub-item:hover{border-color:var(--navy)}
+.sub-code{font-size:11px;font-weight:700;color:var(--orange);font-family:monospace;margin-bottom:3px}
+.sub-text{font-size:14px;color:var(--navy)}
+.learn-body{background:#fff;border:1px solid var(--border);border-radius:10px;padding:20px;margin-top:10px;display:none}
 .learn-body.open{display:block}
-.learn-body h4{font-size:15px;font-weight:700;color:#0f2d4a;margin:14px 0 7px;font-family:system-ui}
+.learn-body h4{font-size:15px;font-weight:700;color:var(--navy);margin:14px 0 7px}
 .learn-body h4:first-child{margin-top:0}
-.learn-body p{font-size:14px;line-height:1.7;margin-bottom:10px;color:#1a202c}
-.kc{background:#e8f0f8;border-left:3px solid #0f2d4a;padding:9px 13px;border-radius:0 6px 6px 0;font-size:13px;margin-bottom:8px;line-height:1.6}
-.kc strong{color:#0f2d4a}
-.tip{background:#fdf0e8;border-left:3px solid #d4570a;padding:9px 13px;border-radius:0 6px 6px 0;font-size:13px;margin-top:4px;line-height:1.6}
-.tip strong{color:#d4570a}
-.spinner-wrap{text-align:center;padding:32px;font-size:13px;color:#718096}
-.spinner{width:26px;height:26px;border:3px solid #e2e8f0;border-top-color:#0f2d4a;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px}
-@keyframes spin{to{transform:rotate(360deg)}}
+.learn-body p{font-size:14px;line-height:1.7;margin-bottom:10px}
+.kc{background:var(--navy-light);border-left:3px solid var(--navy);padding:9px 13px;border-radius:0 6px 6px 0;font-size:13px;margin-bottom:8px;line-height:1.6}
+.kc strong{color:var(--navy)}
+.tip{background:var(--orange-light);border-left:3px solid var(--orange);padding:9px 13px;border-radius:0 6px 6px 0;font-size:13px;line-height:1.6}
+.tip strong{color:var(--orange)}
+
+/* Buttons */
+.btn-p{background:var(--navy);color:#fff;border:none;padding:9px 18px;border-radius:var(--radius);cursor:pointer;font-size:13px;font-weight:600;transition:.15s}
+.btn-p:hover{background:var(--navy-mid)}
+.btn-o{background:#fff;color:var(--navy);border:1px solid var(--border);padding:9px 18px;border-radius:var(--radius);cursor:pointer;font-size:13px;font-weight:600}
+.btn-o:hover{border-color:var(--navy)}
+select.fsel{background:#fff;border:1px solid var(--border);padding:8px 12px;border-radius:var(--radius);font-size:13px;color:var(--text);cursor:pointer}
+
 /* Quiz */
-.quiz-ctrl{display:flex;gap:11px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
-select.fsel{background:#fff;border:1px solid #e2e8f0;padding:8px 12px;border-radius:8px;font-size:13px;color:#1a202c;cursor:pointer}
-.btn-p{background:#0f2d4a;color:#fff;border:none;padding:9px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
-.btn-p:hover{background:#1a4570}
-.btn-o{background:#fff;color:#0f2d4a;border:1px solid #e2e8f0;padding:9px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
-.btn-o:hover{border-color:#0f2d4a}
-.q-prog{font-size:13px;color:#718096;margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.prog-out{flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden}
-.prog-in{height:100%;background:#d4570a;border-radius:3px;transition:width .3s}
-.qcard{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:22px;margin-bottom:18px}
-.qmeta{display:flex;gap:7px;margin-bottom:11px;flex-wrap:wrap}
+.q-prog{font-size:13px;color:var(--text-muted);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.prog-out{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-in{height:100%;background:var(--orange);border-radius:3px;transition:width .3s}
+.qcard{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:18px}
+.qmeta{display:flex;gap:7px;margin-bottom:11px;flex-wrap:wrap;align-items:center}
 .qtag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px}
-.qtag.dom{background:#e8f0f8;color:#0f2d4a}
-.qtag.dif{background:#fffbeb;color:#92400e}
-.qtag.ctry{background:#e8f5ed;color:#1a6b3c}
-.qtext{font-size:17px;font-weight:600;color:#0f2d4a;margin-bottom:16px;line-height:1.5}
+.qtag.dom{background:var(--navy-light);color:var(--navy)}
+.qtag.dif{background:var(--amber-light);color:var(--amber)}
+.qtag.ctry{background:var(--green-light);color:var(--green)}
+.qtext{font-size:17px;font-weight:600;color:var(--navy);margin-bottom:16px;line-height:1.5}
 .opts{display:flex;flex-direction:column;gap:8px}
-.opt{background:#f7f8fa;border:1.5px solid #e2e8f0;padding:12px 15px;border-radius:8px;cursor:pointer;font-size:14px;text-align:left;display:flex;gap:11px;align-items:flex-start;transition:.15s}
-.opt:hover{border-color:#0f2d4a;background:#e8f0f8}
-.opt.correct{background:#e8f5ed;border-color:#1a6b3c}
-.opt.incorrect{background:#fef2f2;border-color:#b91c1c}
-.opt.reveal{background:#e8f5ed;border-color:#1a6b3c}
-.opt-lt{font-weight:700;color:#718096;width:18px;flex-shrink:0}
-.opt.correct .opt-lt{color:#1a6b3c}
-.opt.incorrect .opt-lt{color:#b91c1c}
-.opt.reveal .opt-lt{color:#1a6b3c}
-.expl{margin-top:15px;padding:13px;background:#e8f0f8;border-radius:8px;border-left:3px solid #0f2d4a;font-size:14px;color:#0f2d4a;line-height:1.6;display:none}
+.opt{background:var(--slate-light);border:1.5px solid var(--border);padding:12px 15px;border-radius:var(--radius);cursor:pointer;font-size:14px;text-align:left;display:flex;gap:11px;align-items:flex-start;transition:.15s;width:100%}
+.opt:hover{border-color:var(--navy);background:var(--navy-light)}
+.opt.correct{background:var(--green-light);border-color:var(--green)}
+.opt.incorrect{background:var(--red-light);border-color:var(--red)}
+.opt.reveal{background:var(--green-light);border-color:var(--green)}
+.opt-lt{font-weight:700;color:var(--text-muted);width:18px;flex-shrink:0}
+.opt.correct .opt-lt{color:var(--green)}
+.opt.incorrect .opt-lt{color:var(--red)}
+.opt.reveal .opt-lt{color:var(--green)}
+.expl{margin-top:15px;padding:13px;background:var(--navy-light);border-radius:var(--radius);border-left:3px solid var(--navy);font-size:14px;color:var(--navy);line-height:1.6;display:none}
 .expl.show{display:block}
-.score-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:32px;text-align:center}
-.score-big{font-size:54px;font-weight:700;color:#0f2d4a;line-height:1}
-.score-lbl{font-size:14px;color:#718096;margin-top:4px}
+.score-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;text-align:center}
+.score-big{font-size:54px;font-weight:700;color:var(--navy);line-height:1}
+.score-lbl{font-size:14px;color:var(--text-muted);margin-top:4px}
 .score-row{display:flex;gap:18px;justify-content:center;margin-top:18px;flex-wrap:wrap}
-.sstat{text-align:center}
-.sstat .sn{font-size:24px;font-weight:700}
-.sstat .sl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#718096}
-.sstat.good .sn{color:#1a6b3c}
-.sstat.bad .sn{color:#b91c1c}
+.sstat{text-align:center}.sstat .sn{font-size:24px;font-weight:700}
+.sstat .sl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)}
+.sstat.good .sn{color:var(--green)}.sstat.bad .sn{color:var(--red)}
 .domain-score-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:20px;text-align:left}
-.ds-card{background:#f7f8fa;border-radius:8px;padding:12px}
-.ds-card .ds-name{font-size:12px;font-weight:600;color:#0f2d4a;margin-bottom:6px}
-.ds-bar-bg{background:#e2e8f0;border-radius:3px;height:6px;margin-bottom:4px}
-.ds-bar{background:#d4570a;border-radius:3px;height:6px;transition:width .5s}
-.ds-pct{font-size:12px;color:#718096}
+.ds-card{background:var(--slate-light);border-radius:8px;padding:12px}
+.ds-card .ds-name{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.ds-bar-bg{background:var(--border);border-radius:3px;height:6px;margin-bottom:4px}
+.ds-bar{background:var(--orange);border-radius:3px;height:6px;transition:width .5s}
+.ds-pct{font-size:12px;color:var(--text-muted)}
+
 /* Flashcards */
-.fc-container{perspective:1000px;margin-bottom:18px}
-.fc{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:38px 24px;text-align:center;min-height:190px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:.1s}
+.fc{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:38px 24px;text-align:center;min-height:190px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
 .fc:active{transform:scale(.99)}
-.fc-face{position:absolute;top:13px;left:15px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#718096}
-.fc-text{font-size:17px;font-weight:600;color:#0f2d4a;line-height:1.5}
-.fc.flipped{background:#0f2d4a}
+.fc-face{position:absolute;top:13px;left:15px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+.fc-text{font-size:17px;font-weight:600;color:var(--navy);line-height:1.5}
+.fc.flipped{background:var(--navy)}
 .fc.flipped .fc-text{color:#fff;font-size:14px;font-weight:400;line-height:1.7}
 .fc.flipped .fc-face{color:rgba(255,255,255,.45)}
-.fc-domain{font-size:12px;color:#718096;text-align:center;margin-bottom:14px}
+.fc-domain{font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:14px}
 .fc-nav{display:flex;gap:10px;align-items:center;justify-content:center}
-/* Domain detail */
-.dom-detail{margin-top:16px}
-.dom-detail .sub-list{display:flex;flex-direction:column;gap:8px}
-.dom-detail .sub-card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px 15px}
-.dom-detail .sub-card .sc2{font-size:11px;font-weight:700;color:#d4570a;font-family:monospace;margin-bottom:3px}
-.dom-detail .sub-card .st2{font-size:14px;color:#0f2d4a}
+
+/* Spinner */
+.spinner-wrap{text-align:center;padding:32px;font-size:13px;color:var(--text-muted)}
+.spinner{width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 /* Study guide */
-.sg-section{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:16px}
-.sg-section h3{font-size:16px;font-weight:700;color:#0f2d4a;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #e2e8f0}
-.sg-section p,.sg-section li{font-size:14px;line-height:1.7;color:#1a202c;margin-bottom:8px}
+.sg-section{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
+.sg-section h3{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sg-section p,.sg-section li{font-size:14px;line-height:1.7;color:var(--text);margin-bottom:8px}
 .sg-section ul,.sg-section ol{padding-left:20px}
-.sg-section .tip2{background:#fdf0e8;border-left:3px solid #d4570a;padding:10px 14px;border-radius:0 6px 6px 0;font-size:13px;margin-top:10px}
-@media(max-width:600px){main{padding:14px}.hero{padding:18px}nav{overflow-x:auto}.nb{padding:11px 11px;font-size:12px}}
+.sg-section .tip2{background:var(--orange-light);border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 6px 6px 0;font-size:13px;margin-top:10px}
 </style>
-</head>
 <body>
-<header>
-  <div class="hdr-inner">
-    <div class="hdr-brand">
-      <div class="shield">⚡</div>
-      <div class="brand-text">
-        <h1>AEM Exam Prep Platform</h1>
-        <p>Associate Emergency Manager · IAEM Certification · Comprehensive Study System</p>
-      </div>
+
+<div id="sideOverlay" onclick="closeSidebar()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:199"></div>
+
+<aside id="sidebar">
+  <div class="sb-top">
+    <div class="shield">⚡</div>
+    <div class="sb-brand-text">
+      <div class="sb-title">AEM Prep</div>
+      <div class="sb-sub">IAEM Certification</div>
     </div>
-    <nav>
-      <button class="nb active" onclick="nav('home',this)">🏠 Home</button>
-      <button class="nb" onclick="nav('blueprint',this)">📋 Blueprint</button>
-      <button class="nb" onclick="nav('learn',this)">📖 Learn</button>
-      <button class="nb" onclick="nav('resources',this)">📚 Resources</button>
-      <button class="nb" onclick="nav('quiz',this)">✏️ Practice Exam</button>
-      <button class="nb" onclick="nav('flash',this)">🃏 Flashcards</button>
-      <button class="nb" onclick="nav('docs',this)">📄 Doc Guides</button>
-      <button class="nb" onclick="nav('terms',this)">🔤 Term Drill</button>
-      <button class="nb" onclick="nav('guide',this)">🎯 Study Guide</button>
-      <button class="nb" onclick="nav('progress',this)">✅ Progress</button>
-      <button class="nb" onclick="nav('examday',this)">📅 Exam Day</button>
-    </nav>
+    <button onclick="closeSidebar()" class="sb-close">✕</button>
   </div>
-</header>
-<div class="ctry-bar">
-  <div class="ctry-inner">
-    <span class="ctry-label">📍 Your country:</span>
-    <select class="ctry-sel" id="ctrySelect" onchange="setCountry()">
+  <div class="sb-ctry">
+    <label class="sb-ctry-label">📍 Country</label>
+    <select class="sb-sel" id="ctrySelect" onchange="setCountry()">
       <option value="Canada">🇨🇦 Canada</option>
       <option value="USA">🇺🇸 United States</option>
       <option value="Australia">🇦🇺 Australia</option>
       <option value="NZ">🇳🇿 New Zealand</option>
       <option value="International">🌐 International</option>
     </select>
-    <span class="rcount" id="rcount"></span>
   </div>
+  <nav class="sb-nav">
+    <button class="nb active" onclick="navTo('home',this)">🏠 Home</button>
+    <button class="nb" onclick="navTo('blueprint',this)">📋 Blueprint</button>
+    <button class="nb" onclick="navTo('learn',this)">📖 Learn</button>
+    <button class="nb" onclick="navTo('resources',this)">📚 Resources</button>
+    <button class="nb" onclick="navTo('quiz',this)">✏️ Practice Exam</button>
+    <button class="nb" onclick="navTo('flash',this)">🃏 Flashcards</button>
+    <button class="nb" onclick="navTo('docs',this)">📄 Doc Guides</button>
+    <button class="nb" onclick="navTo('terms',this)">🔤 Term Drill</button>
+    <button class="nb" onclick="navTo('guide',this)">🎯 Study Guide</button>
+    <button class="nb" onclick="navTo('progress',this)">✅ Progress</button>
+    <button class="nb" onclick="navTo('examday',this)">📅 Exam Day</button>
+  </nav>
+  <div id="rcount" class="sb-rcount"></div>
+</aside>
+
+<div class="topbar">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <span class="topbar-title">AEM Exam Prep Platform</span>
 </div>
+
+<div class="layout" style="display:block">
 <main>
   <div id="p-home" class="panel active"></div>
   <div id="p-blueprint" class="panel"></div>
@@ -202,6 +269,7 @@ select.fsel{background:#fff;border:1px solid #e2e8f0;padding:8px 12px;border-rad
   <div id="p-terms" class="panel"></div>
   <div id="p-examday" class="panel"></div>
 </main>
+</div>
 <script>
 const DOMAINS=[
 {id:1,name:"Conduct Risk Management Duties",weight:6.45,subs:[
@@ -2163,7 +2231,7 @@ function updateRcount() {
   document.getElementById('rcount').textContent = `${RESOURCES.core.length} core + ${c} country-specific resources`;
 }
 
-function nav(id, btn) {
+function navTo(id, btn) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
   document.getElementById('p-' + id).classList.add('active');
@@ -2191,18 +2259,18 @@ function renderHome() {
       </div>
     </div>
     <div class="qs-grid">
-      <div class="qsc" onclick="nav('blueprint',null)"><div class="qi">📋</div><h3>Exam Blueprint</h3><p>All 8 domains with weights and competencies</p></div>
-      <div class="qsc" onclick="nav('learn',null)"><div class="qi">📖</div><h3>Learn</h3><p>Detailed content for every competency</p></div>
-      <div class="qsc" onclick="nav('resources',null)"><div class="qi">📚</div><h3>Resources</h3><p>Official documents tailored to your country</p></div>
-      <div class="qsc" onclick="nav('quiz',null)"><div class="qi">✏️</div><h3>Practice Exam</h3><p>Full exam, mini exam, or by domain</p></div>
-      <div class="qsc" onclick="nav('flash',null)"><div class="qi">🃏</div><h3>Flashcards</h3><p>Key terms for all 8 domains</p></div>
-      <div class="qsc" onclick="nav('guide',null)"><div class="qi">🎯</div><h3>Study Guide</h3><p>Exam tips, mnemonics, must-know facts</p></div>
+      <div class="qsc" onclick="navTo('blueprint',null)"><div class="qi">📋</div><h3>Exam Blueprint</h3><p>All 8 domains with weights and competencies</p></div>
+      <div class="qsc" onclick="navTo('learn',null)"><div class="qi">📖</div><h3>Learn</h3><p>Detailed content for every competency</p></div>
+      <div class="qsc" onclick="navTo('resources',null)"><div class="qi">📚</div><h3>Resources</h3><p>Official documents tailored to your country</p></div>
+      <div class="qsc" onclick="navTo('quiz',null)"><div class="qi">✏️</div><h3>Practice Exam</h3><p>Full exam, mini exam, or by domain</p></div>
+      <div class="qsc" onclick="navTo('flash',null)"><div class="qi">🃏</div><h3>Flashcards</h3><p>Key terms for all 8 domains</p></div>
+      <div class="qsc" onclick="navTo('guide',null)"><div class="qi">🎯</div><h3>Study Guide</h3><p>Exam tips, mnemonics, must-know facts</p></div>
     </div>
     <div class="eyebrow">Exam Weighting</div>
     <div class="ptitle">Domain Overview</div>
     <div class="psub">Focus your study time proportionally to exam weight</div>
     <div class="grid2">${DOMAINS.map(d => `
-      <div class="card" onclick="nav('blueprint',null)">
+      <div class="card" onclick="navTo('blueprint',null)">
         <div class="wbar" style="width:${Math.min(d.weight*4,100)}%"></div>
         <div class="wt">${d.weight}% of exam</div>
         <h3>${d.id}. ${d.name}</h3>
@@ -2247,7 +2315,7 @@ function toggleBP(id) {
 
 function jumpLearn(code) {
   const domId = parseInt(code.split('.')[0]);
-  nav('learn', null);
+  navTo('learn', null);
   document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'learn'")) b.classList.add('active'); });
   setTimeout(() => { openLearnDomain(domId, code); }, 100);
 }
@@ -2500,7 +2568,7 @@ function renderScore() {
       <div style="margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
         <button class="btn-p" onclick="renderQuizSetup();startQuiz()">Retake Exam</button>
         <button class="btn-o" onclick="renderQuizSetup()">Change Format</button>
-        <button class="btn-o" onclick="nav('learn',null)">Review Learn Content</button>
+        <button class="btn-o" onclick="navTo('learn',null)">Review Learn Content</button>
       </div>
     </div>`;
 }
@@ -2739,6 +2807,227 @@ function getCardStats() {
   const due = FLASHCARDS.filter(c => { const d = sr[c.t]; return !d || d.nextReview <= today; }).length;
   const mastered = FLASHCARDS.filter(c => { const d = sr[c.t]; return d && d.streak >= 4; }).length;
   return { total, seen, due, mastered };
+}
+
+// ---------- ENHANCED FLASHCARD SECTION ----------
+function renderFlashSetup() {
+  const stats = getCardStats();
+  const el = document.getElementById('p-flash');
+  el.innerHTML = `
+    <div class="eyebrow">Active Recall + Spaced Repetition</div>
+    <div class="ptitle">Flashcards</div>
+    <div class="psub">Cards you miss come back sooner. Cards you know are spaced further apart. The most efficient memorization method.</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px">
+      <div style="background:#0f2d4a;color:#fff;border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:700">${stats.due}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.04em">Due Today</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#1a6b3c">${stats.mastered}</div>
+        <div style="font-size:11px;color:#718096;text-transform:uppercase;letter-spacing:.04em">Mastered</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#0f2d4a">${stats.seen}</div>
+        <div style="font-size:11px;color:#718096;text-transform:uppercase;letter-spacing:.04em">Seen</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#718096">${stats.total}</div>
+        <div style="font-size:11px;color:#718096;text-transform:uppercase;letter-spacing:.04em">Total</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:11px;margin-bottom:20px;align-items:center;flex-wrap:wrap">
+      <select class="fsel" id="flashMode">
+        <option value="sr">📅 Spaced Repetition (Due today)</option>
+        <option value="all">🔀 All Cards (Random)</option>
+        <option value="domain">🎯 By Domain</option>
+        <option value="weak">⚠️ Weakest Cards Only</option>
+      </select>
+      <select class="fsel" id="flashDomain" style="display:none">
+        <option value="all">All Domains</option>
+      </select>
+      <button class="btn-p" onclick="loadFlashV3()">Start →</button>
+      <span id="fcCount" style="font-size:13px;color:#718096;font-family:sans-serif"></span>
+    </div>
+    <div id="flashArea"></div>`;
+  document.getElementById('flashMode').addEventListener('change', function() {
+    document.getElementById('flashDomain').style.display = this.value === 'domain' ? 'inline-block' : 'none';
+  });
+  populateSelects();
+  loadFlashV3();
+}
+
+function loadFlashV3() {
+  const mode = document.getElementById('flashMode').value;
+  const domF = document.getElementById('flashDomain') ? document.getElementById('flashDomain').value : 'all';
+  const sr = getSRData();
+  let cards;
+  if (mode === 'sr') {
+    cards = getDueCards('all');
+    if (cards.length === 0) {
+      document.getElementById('flashArea').innerHTML = `<div style="text-align:center;padding:40px;font-family:sans-serif">
+        <div style="font-size:32px;margin-bottom:10px">🎉</div>
+        <div style="font-size:16px;font-weight:700;color:#0f2d4a;margin-bottom:6px">No cards due today!</div>
+        <div style="font-size:14px;color:#718096">Come back tomorrow or switch to 'All Cards' mode.</div>
+      </div>`;
+      return;
+    }
+  } else if (mode === 'weak') {
+    cards = FLASHCARDS.filter(c => {
+      const d = sr[c.t];
+      return !d || d.streak === 0;
+    });
+    if (cards.length === 0) cards = [...FLASHCARDS].sort(() => Math.random() - 0.5).slice(0, 15);
+  } else if (mode === 'domain') {
+    cards = domF === 'all' ? [...FLASHCARDS] : FLASHCARDS.filter(c => c.dom == domF);
+  } else {
+    cards = [...FLASHCARDS];
+  }
+  fcDeck = shuffle(cards);
+  fcIdx = 0; fcFlipped = false;
+  document.getElementById('fcCount').textContent = `${fcDeck.length} cards`;
+  renderFCV3();
+}
+
+function renderFCV3() {
+  const el = document.getElementById('flashArea');
+  if (!fcDeck.length) { el.innerHTML = '<p style="color:#718096;font-size:14px;text-align:center;padding:40px">No cards available.</p>'; return; }
+  const c = fcDeck[fcIdx];
+  const d = DOMAINS.find(x => x.id === c.dom);
+  const sr = getSRData();
+  const cardData = sr[c.t];
+  const streak = cardData ? cardData.streak : 0;
+  el.innerHTML = `
+    <div class="fc-container">
+      <div class="fc ${fcFlipped ? 'flipped' : ''}" onclick="flipFC()">
+        <div class="fc-face">${fcFlipped ? 'Definition — click to flip back' : 'Term — click to reveal definition'}</div>
+        <div class="fc-text">${fcFlipped ? c.d : c.t}</div>
+      </div>
+    </div>
+    <div class="fc-domain">Domain ${c.dom}: ${d ? d.name : ''} · Streak: ${'⭐'.repeat(Math.min(streak, 5))}${streak === 0 ? '○○○○○' : ''}</div>
+    ${fcFlipped ? `<div style="display:flex;gap:10px;justify-content:center;margin-bottom:16px">
+      <button onclick="rateCard('${c.t.replace(/'/g,"\\'")}', false)" style="background:#fef2f2;border:2px solid #b91c1c;color:#b91c1c;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:14px;font-weight:600;font-family:sans-serif">✗ Didn't know</button>
+      <button onclick="rateCard('${c.t.replace(/'/g,"\\'")}', true)" style="background:#e8f5ed;border:2px solid #1a6b3c;color:#1a6b3c;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:14px;font-weight:600;font-family:sans-serif">✓ Got it</button>
+    </div>` : '<div style="height:54px"></div>'}
+    <div class="fc-nav">
+      <button class="btn-o" onclick="prevFC()" ${fcIdx === 0 ? 'disabled' : ''}>← Prev</button>
+      <span style="font-size:13px;font-family:sans-serif;color:#718096">${fcIdx + 1} / ${fcDeck.length}</span>
+      <button class="btn-o" onclick="nextFCV3()">Next →</button>
+    </div>`;
+}
+
+function rateCard(term, knew) {
+  srResult(term, knew);
+  const p = getProgress();
+  p.fcSeen = Object.keys(getSRData()).length;
+  saveProgress(p);
+  nextFCV3();
+}
+
+function nextFCV3() {
+  if (fcIdx < fcDeck.length - 1) { fcIdx++; fcFlipped = false; renderFCV3(); }
+  else {
+    document.getElementById('flashArea').innerHTML = `<div style="text-align:center;padding:40px;font-family:sans-serif">
+      <div style="font-size:28px;margin-bottom:10px">✅</div>
+      <div style="font-size:16px;font-weight:700;color:#0f2d4a;margin-bottom:6px">Session complete!</div>
+      <div style="font-size:14px;color:#718096;margin-bottom:16px">Cards you missed will appear sooner in future sessions.</div>
+      <button class="btn-p" onclick="loadFlashV3()">Start Again</button>
+    </div>`;
+  }
+}
+
+// ---------- TERMINOLOGY DRILL ----------
+function renderTermDrill() {
+  const el = document.getElementById('p-terms');
+  // Build term list from flashcards + learn content key terms
+  const terms = [];
+  FLASHCARDS.forEach(c => terms.push({ term: c.t, def: c.d, domain: c.dom }));
+  // Add key terms from learn content
+  Object.entries(LEARN).forEach(([code, content]) => {
+    content.keys.forEach(([t, d]) => {
+      if (!terms.find(x => x.term === t)) terms.push({ term: t, def: d, domain: parseInt(code.split('.')[0]) });
+    });
+  });
+
+  el.innerHTML = `
+    <div class="eyebrow">Rapid-Fire Recall</div>
+    <div class="ptitle">Terminology Drill</div>
+    <div class="psub">${terms.length} terms · Type or speak the definition — faster than flashcards for pure vocabulary</div>
+    <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center">
+      <select class="fsel" id="termDomain">
+        <option value="all">All Domains</option>
+        ${DOMAINS.map(d=>`<option value="${d.id}">Domain ${d.id}</option>`).join('')}
+      </select>
+      <select class="fsel" id="termMode">
+        <option value="term2def">Term → Definition</option>
+        <option value="def2term">Definition → Term</option>
+      </select>
+      <button class="btn-p" onclick="startTermDrill()">Start Drill →</button>
+    </div>
+    <div id="termArea"></div>`;
+
+  window._allTerms = terms;
+}
+
+var termDeck = [], termIdx = 0, termRevealed = false, termScore = {correct:0, total:0};
+
+function startTermDrill() {
+  const domF = document.getElementById('termDomain').value;
+  const mode = document.getElementById('termMode').value;
+  window._termMode = mode;
+  termDeck = domF === 'all' ? shuffle([...window._allTerms]) : shuffle(window._allTerms.filter(t => t.domain == domF));
+  termIdx = 0; termRevealed = false; termScore = {correct:0, total:0};
+  renderTermCard();
+}
+
+function renderTermCard() {
+  const el = document.getElementById('termArea');
+  if (termIdx >= termDeck.length) {
+    const pct = Math.round(termScore.correct / termScore.total * 100);
+    el.innerHTML = `<div class="score-card">
+      <div class="score-big">${pct}%</div>
+      <div class="score-lbl">${termScore.correct} of ${termScore.total} terms known</div>
+      <div style="margin-top:16px;display:flex;gap:10px;justify-content:center">
+        <button class="btn-p" onclick="startTermDrill()">Drill Again</button>
+      </div>
+    </div>`;
+    return;
+  }
+  const t = termDeck[termIdx];
+  const mode = window._termMode || 'term2def';
+  const question = mode === 'term2def' ? t.term : t.def;
+  const answer = mode === 'term2def' ? t.def : t.term;
+  const d = DOMAINS.find(x => x.id === t.domain);
+  el.innerHTML = `
+    <div style="margin-bottom:10px;font-size:13px;color:#718096;font-family:sans-serif">${termIdx+1} / ${termDeck.length} · ${termScore.correct} known · Domain ${t.domain}</div>
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:22px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:#d4570a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">${mode === 'term2def' ? 'Define this term:' : 'Name this concept:'}</div>
+      <div style="font-size:20px;font-weight:700;color:#0f2d4a;margin-bottom:18px">${question}</div>
+      ${termRevealed ? `<div style="background:#e8f0f8;border-left:3px solid #0f2d4a;padding:12px 15px;border-radius:0 8px 8px 0;font-size:14px;line-height:1.7;color:#1a202c;margin-bottom:16px">
+        ${answer}
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onclick="rateTermV3(false)" style="flex:1;background:#fef2f2;border:2px solid #b91c1c;color:#b91c1c;border-radius:8px;padding:10px;cursor:pointer;font-size:14px;font-weight:600;font-family:sans-serif">✗ Didn't know</button>
+        <button onclick="rateTermV3(true)" style="flex:1;background:#e8f5ed;border:2px solid #1a6b3c;color:#1a6b3c;border-radius:8px;padding:10px;cursor:pointer;font-size:14px;font-weight:600;font-family:sans-serif">✓ Got it</button>
+      </div>` : `<button class="btn-p" style="width:100%" onclick="revealTerm()">Reveal Answer</button>`}
+    </div>`;
+}
+
+function revealTerm() { termRevealed = true; renderTermCard(); }
+function rateTermV3(knew) {
+  termScore.total++;
+  if (knew) termScore.correct++;
+  srResult('term_' + termDeck[termIdx].term, knew);
+  termIdx++; termRevealed = false; renderTermCard();
+}
+
+// ---------- ENHANCED QUIZ WITH TIMER + BOOKMARKS + WEAK AREA ----------
+var quizTimer = null, quizTimeLeft = 0, quizTimerActive = false;
+var quizBookmarks = new Set();
+var weakAreaMode = false;
+
+function getWeakDomains() {
+  const p = getProgress();
+  return (p.domainScores || []).filter(d => d.pct < 70 && d.total >= 3).map(d => d.id);
 }
 
 // ---------- ENHANCED FLASHCARD SECTION ----------
@@ -3213,63 +3502,6 @@ function answer(sel) {
   if (!isRight && q.ans >= 0) document.getElementById('opt-' + q.ans).classList.add('reveal');
   document.getElementById('expl').classList.add('show');
   setTimeout(() => { quizIdx++; renderQuestion(); }, 2800);
-}
-
-function renderScore() {
-  if (quizTimer) { clearInterval(quizTimer); quizTimer = null; }
-  const el = document.getElementById('quizArea');
-  const pct = Math.round((quizCorrect / quizQ.length) * 100);
-  updateQuizBest(pct);
-
-  // Save domain scores for weak area targeting
-  const p = getProgress();
-  p.domainScores = DOMAINS.map(d => {
-    const s = quizDomainScores[d.id];
-    return { id: d.id, pct: s.total > 0 ? Math.round(s.correct/s.total*100) : null, total: s.total };
-  }).filter(d => d.total > 0);
-  saveProgress(p);
-
-  const wrong = quizQ.length - quizCorrect;
-  const grade = pct >= 85 ? '🎉 Excellent! You are very well prepared.' :
-    pct >= 75 ? '✅ Good work — you are on track to pass.' :
-    pct >= 65 ? '📖 Getting close — review your weak domains and retry.' :
-    '📚 Need more study — focus on the domains below showing red.';
-
-  const domBreakdown = DOMAINS.map(d => {
-    const s = quizDomainScores[d.id];
-    if (!s || s.total === 0) return '';
-    const p2 = Math.round((s.correct / s.total) * 100);
-    const color = p2 >= 75 ? '#1a6b3c' : p2 >= 60 ? '#92400e' : '#b91c1c';
-    const bg = p2 >= 75 ? '#e8f5ed' : p2 >= 60 ? '#fffbeb' : '#fef2f2';
-    return `<div class="ds-card" style="background:${bg}">
-      <div class="ds-name">D${d.id}: ${d.name.substring(0,28)}</div>
-      <div class="ds-bar-bg"><div class="ds-bar" style="width:${p2}%;background:${color}"></div></div>
-      <div class="ds-pct" style="color:${color}">${p2}% (${s.correct}/${s.total})</div>
-    </div>`;
-  }).join('');
-
-  el.innerHTML = `
-    <div class="score-card">
-      <div class="score-big">${pct}%</div>
-      <div class="score-lbl">${quizCorrect} correct of ${quizQ.length} questions</div>
-      <p style="font-size:15px;font-family:sans-serif;color:#1a202c;margin-top:10px">${grade}</p>
-      <div class="score-row">
-        <div class="sstat good"><div class="sn">${quizCorrect}</div><div class="sl">Correct</div></div>
-        <div class="sstat bad"><div class="sn">${wrong}</div><div class="sl">Incorrect</div></div>
-        <div class="sstat"><div class="sn">${quizQ.length}</div><div class="sl">Total</div></div>
-      </div>
-      ${domBreakdown ? `<div style="margin-top:22px;text-align:left">
-        <div style="font-size:13px;font-weight:700;color:#0f2d4a;margin-bottom:10px">Performance by Domain</div>
-        <div class="domain-score-grid">${domBreakdown}</div>
-        <div style="margin-top:12px;font-size:12px;color:#718096;font-family:sans-serif">Domains below 70% will appear in your Weak Areas exam mode</div>
-      </div>` : ''}
-      <div style="margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <button class="btn-p" onclick="renderQuizSetup();startQuiz()">Retake</button>
-        <button class="btn-o" onclick="setWeakArea()">📚 Study Weak Areas</button>
-        <button class="btn-o" onclick="renderQuizSetup()">Change Format</button>
-        <button class="btn-o" onclick="nav('learn',null)">Review Content</button>
-      </div>
-    </div>`;
 }
 
 function setWeakArea() {
@@ -4190,20 +4422,20 @@ function renderHome() {
       </div>
     </div>
     <div class="qs-grid">
-      <div class="qsc" onclick="nav('blueprint',null)"><div class="qi">📋</div><h3>Exam Blueprint</h3><p>All 8 domains with weights and competencies</p></div>
-      <div class="qsc" onclick="nav('learn',null)"><div class="qi">📖</div><h3>Learn</h3><p>Detailed content for every competency</p></div>
-      <div class="qsc" onclick="nav('docs',null)"><div class="qi">📄</div><h3>Doc Guides</h3><p>15 key documents broken down by testable content</p></div>
-      <div class="qsc" onclick="nav('resources',null)"><div class="qi">📚</div><h3>Resources</h3><p>Official documents tailored to your country</p></div>
-      <div class="qsc" onclick="nav('quiz',null)"><div class="qi">✏️</div><h3>Practice Exam</h3><p>${totalQ}+ questions · 4 types · Timed</p></div>
-      <div class="qsc" onclick="nav('flash',null)"><div class="qi">🃏</div><h3>Flashcards</h3><p>Spaced repetition · 50 cards</p></div>
-      <div class="qsc" onclick="nav('terms',null)"><div class="qi">🔤</div><h3>Term Drill</h3><p>Rapid-fire vocabulary across all domains</p></div>
-      <div class="qsc" onclick="nav('guide',null)"><div class="qi">🎯</div><h3>Study Guide</h3><p>Mnemonics, exam traps, must-know facts</p></div>
+      <div class="qsc" onclick="navTo('blueprint',null)"><div class="qi">📋</div><h3>Exam Blueprint</h3><p>All 8 domains with weights and competencies</p></div>
+      <div class="qsc" onclick="navTo('learn',null)"><div class="qi">📖</div><h3>Learn</h3><p>Detailed content for every competency</p></div>
+      <div class="qsc" onclick="navTo('docs',null)"><div class="qi">📄</div><h3>Doc Guides</h3><p>15 key documents broken down by testable content</p></div>
+      <div class="qsc" onclick="navTo('resources',null)"><div class="qi">📚</div><h3>Resources</h3><p>Official documents tailored to your country</p></div>
+      <div class="qsc" onclick="navTo('quiz',null)"><div class="qi">✏️</div><h3>Practice Exam</h3><p>${totalQ}+ questions · 4 types · Timed</p></div>
+      <div class="qsc" onclick="navTo('flash',null)"><div class="qi">🃏</div><h3>Flashcards</h3><p>Spaced repetition · 50 cards</p></div>
+      <div class="qsc" onclick="navTo('terms',null)"><div class="qi">🔤</div><h3>Term Drill</h3><p>Rapid-fire vocabulary across all domains</p></div>
+      <div class="qsc" onclick="navTo('guide',null)"><div class="qi">🎯</div><h3>Study Guide</h3><p>Mnemonics, exam traps, must-know facts</p></div>
     </div>
     <div class="eyebrow">Exam Weighting</div>
     <div class="ptitle">Domain Overview</div>
     <div class="psub">Focus your study time proportionally to exam weight</div>
     <div class="grid2">${DOMAINS.map(d => `
-      <div class="card" onclick="nav('blueprint',null)">
+      <div class="card" onclick="navTo('blueprint',null)">
         <div class="wbar" style="width:${Math.min(d.weight*4,100)}%"></div>
         <div class="wt">${d.weight}% of exam</div>
         <h3>${d.id}. ${d.name}</h3>
@@ -4212,6 +4444,63 @@ function renderHome() {
     </div>`;
 }
 
+
+
+// ── SIDEBAR ───────────────────────────────────────────────────────────────
+var _sbOpen = false;
+
+function openSidebar() {
+  var sb = document.getElementById('sidebar');
+  var ov = document.getElementById('sideOverlay');
+  var mn = document.querySelector('main');
+  if (!sb) return;
+  sb.classList.add('sb-open');
+  if (window.innerWidth < 769) {
+    if (ov) ov.style.display = 'block';
+  } else {
+    if (ov) ov.style.display = 'none';
+    if (mn) mn.classList.add('sb-pushed');
+  }
+  _sbOpen = true;
+}
+
+function closeSidebar() {
+  var sb = document.getElementById('sidebar');
+  var ov = document.getElementById('sideOverlay');
+  var mn = document.querySelector('main');
+  if (!sb) return;
+  sb.classList.remove('sb-open');
+  if (ov) ov.style.display = 'none';
+  if (mn) mn.classList.remove('sb-pushed');
+  _sbOpen = false;
+}
+
+function toggleSidebar() {
+  if (_sbOpen) { closeSidebar(); } else { openSidebar(); }
+}
+
+document.addEventListener('click', function(e) {
+  if (window.innerWidth < 769 && e.target.closest && e.target.closest('.nb')) {
+    setTimeout(closeSidebar, 100);
+  }
+}, false);
+
+window.addEventListener('DOMContentLoaded', function() {
+  if (window.innerWidth >= 769) { openSidebar(); }
+  // Ensure topbar is at very top with no gap
+  if (typeof allQ === 'undefined' || !allQ) {
+    allQ = [];
+    if (typeof QUESTIONS !== 'undefined') allQ = allQ.concat(QUESTIONS);
+    if (typeof QUESTIONS2 !== 'undefined') allQ = allQ.concat(QUESTIONS2);
+    if (typeof QUESTIONS3 !== 'undefined') allQ = allQ.concat(QUESTIONS3);
+    if (typeof QUESTIONS4 !== 'undefined') allQ = allQ.concat(QUESTIONS4);
+  }
+  if (typeof updateRcount === 'function') updateRcount();
+  if (typeof renderHome === 'function') renderHome();
+  if (typeof populateSelects === 'function') populateSelects();
+});
+
 </script>
+
 </body>
 </html>
